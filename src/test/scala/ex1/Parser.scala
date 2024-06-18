@@ -3,6 +3,7 @@ package ex1
 import ex1.*
 import org.junit.Assert.*
 import org.junit.Test
+import org.scalatest.matchers.should.Matchers.*
 
 class ParserTests:
   def parser = new BasicParser(Set('a', 'b', 'c'))
@@ -12,7 +13,7 @@ class ParserTests:
   def parserNTC = new NotTwoConsecutiveParser(Set('X', 'Y', 'Z'))
   // note we do not need a class name here, we use the structural type
   def parserNTCNE = new BasicParser(Set('X', 'Y', 'Z')) with NotTwoConsecutive[Char] with NonEmpty[Char]
-  def sparser: Parser[Char] = ??? // "abc".charParser()
+  def sparser: Parser[Char] = "abc".charParser // "abc".charParser()
 
   @Test
   def testBasicParser =
@@ -43,3 +44,10 @@ class ParserTests:
     assertTrue(sparser.parseAll("aabc".toList))
     assertFalse(sparser.parseAll("aabcdc".toList))
     assertTrue(sparser.parseAll("".toList))
+
+class ScalaTestShowcase extends org.scalatest.funsuite.AnyFunSuite :
+  test(" List operations , and should matchers "):
+    def parser = new BasicParser(Set('a', 'b', 'c'))
+    parser.parseAll("aabc".toList) should be (true)
+    parser.parseAll("aabcdc".toList) should be (false)
+    parser.parseAll("".toList)  should  not be (false)
